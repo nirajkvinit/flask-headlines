@@ -1,2 +1,2 @@
 # flask-headlines
-Flask Learning
+Flask Learning example
