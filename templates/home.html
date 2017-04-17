@@ -3,14 +3,23 @@
     <title>Headlines</title>
   </head>
   <body>
-      <h1>Headlines</h1>
 
-
-      {% for article in articles %}
-        <b><a href="{{article.link}}" target="_blank">{{article.title}}</a></b>
-        <i>{{article.published}}</i>
-        <p>{{article.summary}}</p>
-        <hr>
-      {% endfor %}
+    <form>
+      <select class="" name="publication">
+        <option value="cnn">CNN</option>
+        <option value="bbc">BBC</option>
+        <option value="iol">IOL</option>
+        <option value="fox">Fox</option>
+      </select>
+      <input type="submit" name="" value="Submit">
+    </form>
+    <hr>
+    <h1>Headlines</h1>
+    {% for article in articles %}
+      <b><a href="{{article.link}}" target="_blank">{{article.title}}</a></b>
+      <i>{{article.published}}</i>
+      <p>{{article.summary}}</p>
+      <hr>
+    {% endfor %}
   </body>
 </html>
