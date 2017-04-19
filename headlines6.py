@@ -1,13 +1,12 @@
 import feedparser
 import json
-#import urllib2
-import urllib.request as urllib2
-#import urllib
-from urllib.parse import quote 
+import urllib.request
 
+from urllib.parse import quote
 from flask import Flask
 from flask import render_template
 from flask import request
+from pprint import pprint
 
 
 app = Flask(__name__)
@@ -34,10 +33,13 @@ def get_news():
 def get_weather(query):
     #api_url = http://api.openweathermap.org/data/2.5/weather?q={}&units=metric&appid=65b8831d1736fe05836815097ae4a457
     api_url = "http://api.openweathermap.org/data/2.5/weather?q={}&units=metric&appid=65b8831d1736fe05836815097ae4a457"
-    query = urllib.quote(query)
+    query = quote(query)
     url = api_url.format(query)
-    data = urllib2.urlopen(url).read()
+    print(url)
+    data = urllib.request.urlopen(url).read().decode("utf-8")
+    print(type(data))
     parsed = json.loads(data)
+    print(type(parsed))
     weather = None
     if parsed.get("weather"):
         weather = {
@@ -49,3 +51,4 @@ def get_weather(query):
 
 if __name__ == "__main__":
     app.run(port=5000, debug=True)
+#http://api.openweathermap.org/data/2.5/weather?q=London%2C%20UK&units=metric&appid=65b8831d1736fe05836815097ae4a457
