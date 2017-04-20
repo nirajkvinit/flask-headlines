@@ -20,10 +20,13 @@ RSS_FEEDS = {
 
 DEFAULTS = {
     'publication' : 'cnn',
-    'city' : 'Calcutta, IN'
+    'city' : 'Calcutta, IN',
+    'currency_from' : 'GBP',
+    'currency_to' : 'USD'
 }
 
 WEATHER_URL = "http://api.openweathermap.org/data/2.5/weather?q={}&units=metric&appid=65b8831d1736fe05836815097ae4a457"
+CURRENCY_URL = "https://openexchangerates.org//api/latest.json?app_id=09f8ae338add4275a341e3c556444eae"
 
 @app.route("/")
 def home():
@@ -38,7 +41,27 @@ def home():
         city = DEFAULTS['city']
     weather = get_weather(city)
 
-    return render_template("home2.html", articles = articles, weather = weather, feeds = RSS_FEEDS, publication = publication, city = city)
+    currency_from = request.args.get("currency_from")
+    currency_to = request.args.get("currency_to")
+
+    if not currency_from:
+        currency_from = DEFAULTS['currency_from']
+    if not currency_to:
+        currency_to = DEFAULTS['currency_to']
+
+    rate = get_rates(currency_from, currency_to)
+
+    return render_template(
+        "home2.html",
+        articles = articles,
+        weather = weather,
+        feeds = RSS_FEEDS,
+        publication = publication,
+        city = city,
+        currency_from = currency_from,
+        currency_to = currency_to,
+        rate = rate
+    )
 
 def get_news(query):
     if not query or query.lower() not in RSS_FEEDS:
@@ -52,7 +75,6 @@ def get_news(query):
 def get_weather(query):
     query = quote(query)
     url = WEATHER_URL.format(query)
-    print(url)
     data = urllib.request.urlopen(url).read().decode("utf-8")
     parsed = json.loads(data)
     weather = None
@@ -60,10 +82,19 @@ def get_weather(query):
         weather = {
             "description" : parsed["weather"][0]["description"],
             "temperature" : parsed["main"]["temp"],
-            "city" : parsed["name"]
+            "city" : parsed["name"],
+            "country" : parsed["sys"]["country"]
         }
     return weather
 
+def get_rates(from_rate, to_rate):
+    all_currency = urllib.request.urlopen(CURRENCY_URL).read().decode("utf-8")
+    parsed = json.loads(all_currency).get('rates')
+    parsed_from_rate = parsed.get(from_rate.upper())
+    parsed_to_rate = parsed.get(to_rate.upper())
+    return parsed_to_rate/parsed_from_rate
+
 if __name__ == "__main__":
     app.run(port=5000, debug=True)
-#http://api.openweathermap.org/data/2.5/weather?q=London%2C%20UK&units=metric&appid=65b8831d1736fe05836815097ae4a457
+#65b8831d1736fe05836815097ae4a457 #WEATHER_URL
+#09f8ae338add4275a341e3c556444eae #CURRENCY_URL

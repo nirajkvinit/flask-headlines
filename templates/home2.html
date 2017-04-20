@@ -4,8 +4,11 @@
   </head>
   <body>
     <h3>Weather Report</h3>
-    <p>City: <strong>{{weather.city}}</strong></p>
+    <p>City: <strong>{{weather.city}}</strong>, Country: <strong>{{weather.country}}</strong></p>
     <p>{{weather.description}} | {{weather.temperature}}&#8451;</p>
+    <hr>
+    <h3>Currency Report</h3>
+    <p>1 {{currency_from}} = {{currency_to}} {{rate}}</p>
     <hr>
     <form>
       <label> Enter City Name:
