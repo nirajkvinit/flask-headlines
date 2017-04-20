@@ -4,16 +4,20 @@
   </head>
   <body>
     <h3>Weather Report</h3>
-    <strong>Current Weather</strong>:
     <p>City: <strong>{{weather.city}}</strong></p>
     <p>{{weather.description}} | {{weather.temperature}}&#8451;</p>
     <hr>
     <form>
-      <select class="" name="publication">
-        {% for feed_name in feeds %}
-          <option value="{{feed_name}}" {{'selected="selected"' if publication == feed_name}}>{{feed_name}}</option>
-        {% endfor %}
-      </select>
+      <label> Enter City Name:
+        <input type="text" name="city" placeholder="weather search" value="{{city}}" >
+      </label> &nbsp;&nbsp;
+      <label> Select RSS Feeds:
+        <select class="" name="publication">
+          {% for feed_name in feeds %}
+            <option value="{{feed_name}}" {{'selected="selected"' if publication == feed_name}}>{{feed_name}}</option>
+          {% endfor %}
+        </select>
+      </label> &nbsp;&nbsp; &nbsp;&nbsp;
       <input type="submit" name="" value="Submit">
     </form>
     <hr>

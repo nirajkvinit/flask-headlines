@@ -18,28 +18,43 @@ RSS_FEEDS = {
     'iol' : 'http://www.iol.co.za/cmlink/1.640'
 }
 
+DEFAULTS = {
+    'publication' : 'cnn',
+    'city' : 'Calcutta, IN'
+}
+
+WEATHER_URL = "http://api.openweathermap.org/data/2.5/weather?q={}&units=metric&appid=65b8831d1736fe05836815097ae4a457"
+
 @app.route("/")
-def get_news():
-    query = request.args.get("publication")
+def home():
+
+    publication = request.args.get("publication")
+    if not publication:
+        publication = DEFAULTS['publication']
+    articles = get_news(publication)
+
+    city = request.args.get('city')
+    if not city:
+        city = DEFAULTS['city']
+    weather = get_weather(city)
+
+    return render_template("home2.html", articles = articles, weather = weather, feeds = RSS_FEEDS, publication = publication, city = city)
+
+def get_news(query):
     if not query or query.lower() not in RSS_FEEDS:
-        publication = "bbc"
+        publication = DEFAULTS['publication']
     else:
         publication = query.lower()
 
     feed = feedparser.parse(RSS_FEEDS[publication])
-    weather = get_weather("London, UK")
-    return render_template("home2.html", articles=feed['entries'], feeds=RSS_FEEDS, publication = publication, weather=weather)
+    return feed['entries']
 
 def get_weather(query):
-    #api_url = http://api.openweathermap.org/data/2.5/weather?q={}&units=metric&appid=65b8831d1736fe05836815097ae4a457
-    api_url = "http://api.openweathermap.org/data/2.5/weather?q={}&units=metric&appid=65b8831d1736fe05836815097ae4a457"
     query = quote(query)
-    url = api_url.format(query)
+    url = WEATHER_URL.format(query)
     print(url)
     data = urllib.request.urlopen(url).read().decode("utf-8")
-    print(type(data))
     parsed = json.loads(data)
-    print(type(parsed))
     weather = None
     if parsed.get("weather"):
         weather = {
