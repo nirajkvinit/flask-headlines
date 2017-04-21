@@ -21,8 +21,8 @@ RSS_FEEDS = {
 DEFAULTS = {
     'publication' : 'cnn',
     'city' : 'Calcutta, IN',
-    'currency_from' : 'GBP',
-    'currency_to' : 'USD'
+    'currency_from' : 'USD',
+    'currency_to' : 'INR'
 }
 
 WEATHER_URL = "http://api.openweathermap.org/data/2.5/weather?q={}&units=metric&appid=65b8831d1736fe05836815097ae4a457"
@@ -49,7 +49,7 @@ def home():
     if not currency_to:
         currency_to = DEFAULTS['currency_to']
 
-    rate = get_rates(currency_from, currency_to)
+    rate, currencies = get_rates(currency_from, currency_to)
 
     return render_template(
         "home2.html",
@@ -60,7 +60,8 @@ def home():
         city = city,
         currency_from = currency_from,
         currency_to = currency_to,
-        rate = rate
+        rate = rate,
+        currencies = sorted(currencies)
     )
 
 def get_news(query):
@@ -92,7 +93,7 @@ def get_rates(from_rate, to_rate):
     parsed = json.loads(all_currency).get('rates')
     parsed_from_rate = parsed.get(from_rate.upper())
     parsed_to_rate = parsed.get(to_rate.upper())
-    return parsed_to_rate/parsed_from_rate
+    return (parsed_to_rate/parsed_from_rate, parsed.keys())
 
 if __name__ == "__main__":
     app.run(port=5000, debug=True)

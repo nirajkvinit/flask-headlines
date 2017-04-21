@@ -3,6 +3,45 @@
     <title>Headlines ({{publication}})</title>
   </head>
   <body>
+    <form>
+      <fieldset>
+        <legend>Form to Fetch Data</legend>
+        <label>
+          From Currency :
+          <select name="currency_from">
+            {% for currency in currencies %}
+              <option value="{{currency}}"
+                {{'selected="selected"' if currency_from == currency}}
+              >{{currency}}</option>
+            {% endfor %}
+          </select>
+        </label>
+        <label>
+          To Currency :
+          <select name="currency_to">
+            {% for currency in currencies %}
+              <option value="{{currency}}"
+                {{'selected="selected"' if currency_to == currency}}
+              >{{currency}}</option>
+            {% endfor %}
+          </select>
+        </label>
+        &nbsp;&nbsp;&nbsp;
+        <label> Enter City Name:
+          <input type="text" name="city" placeholder="weather search" value="{{city}}" >
+        </label> &nbsp;&nbsp;
+        <label> Select RSS Feeds:
+          <select class="" name="publication">
+            {% for feed_name in feeds %}
+              <option value="{{feed_name}}" {{'selected="selected"' if publication == feed_name}}>{{feed_name}}</option>
+            {% endfor %}
+          </select>
+        </label> &nbsp;&nbsp; &nbsp;&nbsp;
+        <input type="submit" name="" value="Submit">
+      </fieldset>
+    </form>
+    <hr>
+
     <h3>Weather Report</h3>
     <p>City: <strong>{{weather.city}}</strong>, Country: <strong>{{weather.country}}</strong></p>
     <p>{{weather.description}} | {{weather.temperature}}&#8451;</p>
@@ -10,20 +49,7 @@
     <h3>Currency Report</h3>
     <p>1 {{currency_from}} = {{currency_to}} {{rate}}</p>
     <hr>
-    <form>
-      <label> Enter City Name:
-        <input type="text" name="city" placeholder="weather search" value="{{city}}" >
-      </label> &nbsp;&nbsp;
-      <label> Select RSS Feeds:
-        <select class="" name="publication">
-          {% for feed_name in feeds %}
-            <option value="{{feed_name}}" {{'selected="selected"' if publication == feed_name}}>{{feed_name}}</option>
-          {% endfor %}
-        </select>
-      </label> &nbsp;&nbsp; &nbsp;&nbsp;
-      <input type="submit" name="" value="Submit">
-    </form>
-    <hr>
+
     <h1>Headlines ({{publication}})</h1>
     {% for article in articles %}
       <b><a href="{{article.link}}" target="_blank">{{article.title}}</a></b>
