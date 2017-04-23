@@ -22,9 +22,9 @@ class DBHelper:
     def add_input(self, data):
         connection = self.connect()
         try:
-            query = "insert into crimes (description) value ('{}');".format(data)
+            query = "insert into crimes (description) value (%s);"
             with connection.cursor() as cursor:
-                cursor.execute(query)
+                cursor.execute(query, data)
                 connection.commit()
         finally:
             connection.close()
