@@ -12,7 +12,7 @@ class DBHelper:
     def get_all_inputs(self):
         connection = self.connect()
         try:
-            query = "slect description from crimes;"
+            query = "select description from crimes;"
             with connection.cursor() as cursor:
                 cursor.execute(query)
                 return cursor.fetchall()

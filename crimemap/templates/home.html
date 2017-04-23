@@ -11,8 +11,10 @@
       <input type="submit" value="Submit">
     </form><hr />
     <a href="/clear">Clear</a><br />
-    {% for userinput in data %}
-      <p>{{userinput}}</p>
-    {% endfor %}
+    {% if data is not none %}
+      {% for userinput in data %}
+        <p>{{userinput}}</p>
+      {% endfor %}
+    {% endif %}
   </body>
 </html>
