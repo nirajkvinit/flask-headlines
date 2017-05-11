@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Crime Map</title>
+    <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js">
+    </script>
+    <script type="text/javascript">
+      var map;
+      function initialize() {
+        var mapOptions = {
+          center: new google.maps.LatLng(
+            -33.30578381949298, 26.523442268371582),
+            zoom: 15
+        };
+        map = new google.maps.Map(document.getElementById("map-canvas"), mapOptions);
+        google.maps.event.addListener(map, 'click', function(event){
+          placeMarker(event.latLng);
+        });
+      }
+      function placeMarker(location) {
+        var marker = new google.maps.Marker({
+          position : location,
+          map : map
+        });
+      }
+    </script>
+  </head>
+  <body onload="initialize()">
+    <div id="map-canvas" style="width:80%; height:500px;">
+
+    </div>
+  </body>
+</html>
