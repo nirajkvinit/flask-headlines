@@ -3,6 +3,35 @@
   <head>
     <meta charset="utf-8">
     <title>Crime Map</title>
+
+  </head>
+  <body onload="initialize()">
+    <h1>CrimeMap</h1>
+    <p>A map of recent criminal activity in the Grahamstown area.</p>
+
+    <div id="map-canvas" style="width:70%; height:500px;"></div>
+
+    <div id="newcrimeform">
+      <h2>Submit New Crime</h2>
+      <form class="" action="/submitcrime" method="post">
+        <label for="category">Category</label>
+        <select name="category" id="category">
+          <option value="mugging">Mugging</option>
+          <option value="breakin">Break-in</option>
+        </select>
+        <label for="date">Date</label>
+        <input type="date" name="date" id="date" value="">
+        <label for="latitude">Latitude</label>
+        <input type="text" name="latitude" id="latitude" value="">
+        <label for="longtitude">Longtitude</label>
+        <input type="text" name="longtitude" id="longtitude" value="">
+        <textarea name="description" id="description" placeholder="A brief but detailed description of the crime"></textarea>
+        <input type="submit" name="" value="Submit">
+      </form>
+
+    </div>
+
+    <!-- Footer Section -->
     <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js">
     </script>
     <script type="text/javascript">
@@ -30,10 +59,5 @@
         }
       }
     </script>
-  </head>
-  <body onload="initialize()">
-    <div id="map-canvas" style="width:80%; height:500px;">
-
-    </div>
   </body>
 </html>
