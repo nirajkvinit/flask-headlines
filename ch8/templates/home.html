@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Crime Map</title>
+    <link type="text/css" rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}" />
+  </head>
+  <body onload="initialize()">
+    <h1><a href="/">CrimeMap</a></h1>
+    <p>A map of recent criminal activity in the Grahamstown area.</p>
+
+    <div id="map-canvas"></div>
+
+    <div id="newcrimeform">
+      <h2>Submit New Crime</h2>
+      {% if error_message %}
+        <div class="" id="error">
+          <p>{{ error_message }}</p>
+        </div>
+      {% endif %}
+      <form class="" action="/submitcrime" method="post">
+        <label for="category">Category</label>
+        <select name="category" id="category">
+          {% for category in categories %}
+            <option value="{{ category }}">{{ category }}</option>
+          {% endfor %}
+        </select>
+        <br>
+        <label for="date">Date</label>
+        <input type="date" name="date" id="date" value="">
+        <br>
+        <label for="latitude">Latitude</label>
+        <input type="text" name="latitude" id="latitude" readonly>
+        <br>
+        <label for="longitude">Longitude</label>
+        <input type="text" name="longitude" id="longitude" readonly>
+        <br>
+        <textarea name="description" id="description" placeholder="A brief but detailed description of the crime"></textarea>
+        <br>
+        <input type="submit" name="" value="Submit">
+      </form>
+
+    </div>
+
+    <!-- Footer Section -->
+    <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js">
+    </script>
+    <script type="text/javascript">
+      var map,
+          marker;
+      function initialize() {
+        var mapOptions = {
+          center: new google.maps.LatLng(
+            -33.30578381949298, 26.523442268371582),
+            zoom: 15
+        };
+        map = new google.maps.Map(document.getElementById("map-canvas"), mapOptions);
+        google.maps.event.addListener(map, 'click', function(event){
+          placeMarker(event.latLng);
+        });
+        placeCrimes({{crimes | safe}});
+      }
+
+      function placeCrimes(crimes){
+        for(i=0; i<crimes.length; i++) {
+          crime = new google.maps.Marker({
+            position : new google.maps.LatLng(crimes[i].latitude, crimes[i].longitude),
+            map : map,
+            title : crimes[i].date +"\n" +
+              crimes[i].category + "\n" + crimes[i].description
+          });
+        }
+      }
+
+      function placeMarker(location) {
+        if(marker) {
+          marker.setPosition(location);
+        } else {
+          marker = new google.maps.Marker({
+            position : location,
+            map : map
+          });
+        }
+        document.getElementById('latitude').value = location.lat();
+        document.getElementById('longitude').value = location.lng();
+      }
+    </script>
+  </body>
+</html>
