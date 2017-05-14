@@ -4,6 +4,7 @@ from flask import request
 import json
 import datetime
 import dateparser
+import string
 
 import dbconfig
 
@@ -23,23 +24,6 @@ def home(error_message=None):
     crimes = json.dumps(crimes)
     return render_template("home.html", crimes=crimes, categories=categories, error_message=error_message)
 
-@app.route("/add", methods=["POST"])
-def add():
-    try:
-        data = request.form.get("userinput")
-        DB.add_input(data)
-    except Exception as e:
-        print(e)
-    return home()
-
-@app.route("/clear")
-def clear():
-    try:
-        DB.clear_all()
-    except Exception as e:
-        print(e)
-    return home()
-
 @app.route("/submitcrime", methods=['POST'])
 def submitcrime():
     category = request.form.get("category")
@@ -56,7 +40,7 @@ def submitcrime():
     except ValueError:
         return home()
 
-    description = request.form.get("description")
+    description = sanitize_string(request.form.get("description"))
     DB.add_crime(category, date, latitude, longitude, description)
     return home()
 
@@ -66,6 +50,11 @@ def format_date(userdate):
         return datetime.datetime.strftime(date, "%Y-%m-%d")
     except TypeError:
         return None
+
+def sanitize_string(userinput):
+    whitelist = string.ascii_letters + string.digits + " !?$.,;:-_'()&"
+    #following line has error. Fix it
+    return filter(lambda x: x in whitelist, userinput)
 
 if __name__ == '__main__':
     app.run(port=5000, debug=True)
