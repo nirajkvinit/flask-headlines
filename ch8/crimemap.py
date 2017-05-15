@@ -54,7 +54,7 @@ def format_date(userdate):
 def sanitize_string(userinput):
     whitelist = string.ascii_letters + string.digits + " !?$.,;:-_'()&"
     #following line has error. Fix it
-    return filter(lambda x: x in whitelist, userinput)
+    return "".join(filter(lambda x: x in whitelist, userinput)) # ref. https://stackoverflow.com/questions/40046864/attributeerror-filter-object-has-no-attribute-replace-in-python-3
 
 if __name__ == '__main__':
     app.run(port=5000, debug=True)
