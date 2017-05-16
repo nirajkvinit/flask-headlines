@@ -88,5 +88,6 @@ ENV/
 # Rope project settings
 .ropeproject
 
-.pyc
-crimemap/dbconfig.py
+*.pyc
+dbconfig.py
+config.py
