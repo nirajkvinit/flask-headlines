@@ -12,8 +12,10 @@ from flask_login import logout_user
 
 from mockdbhelper import MockDBHelper as DBHelper
 from user import User
+from passwordhelper import PasswordHelper
 
 DB = DBHelper()
+PH = PasswordHelper()
 
 app = Flask(__name__)
 login_manager = LoginManager(app)
@@ -22,18 +24,33 @@ app.secret_key = 'GLTipXKTxg+E53YLzGa3M0tBqk1ZJmZjhGfimPQwOr+69wKOJ+hQeBJrqdfcZ2
 @app.route("/")
 def home():
     return render_template("home.html")
-    #return render_template("home.html")
+
+@app.route("/register", methods=["POST"])
+def register():
+    email = request.form.get("email")
+    pw1 = request.form.get("password")
+    pw2 = request.form.get("password2")
+
+    if not pw1 == pw2:
+        return redirect(url_for('home'))
+    if DB.get_user(email):
+        return redirect(url_for('home'))
+
+    salt = PH.get_salt()
+    hashed = PH.get_hash(pw1 + salt)
+    DB.add_user(email, salt, hashed)
+    return redirect(url_for('home'))
 
 @app.route("/login", methods=["POST"])
 def login():
     email = request.form.get("email")
     password = request.form.get("password")
-    user_password = DB.get_user(email)
-    if user_password and user_password == password:
+    stored_user = DB.get_user(email)
+    print(stored_user)
+    if stored_user and PH.validate_password(password, stored_user['salt'], stored_user['hashed']):
         user = User(email)
         login_user(user, remember=True)
         return redirect(url_for('account'))
-
     return home()
 
 @app.route("/logout")
