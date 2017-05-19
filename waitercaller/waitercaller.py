@@ -17,6 +17,7 @@ from mockdbhelper import MockDBHelper as DBHelper
 from user import User
 from passwordhelper import PasswordHelper
 from bitlyhelper import BitlyHelper
+from forms import RegistrationForm
 
 DB = DBHelper()
 PH = PasswordHelper()
@@ -28,7 +29,8 @@ app.secret_key = 'GLTipXKTxg+E53YLzGa3M0tBqk1ZJmZjhGfimPQwOr+69wKOJ+hQeBJrqdfcZ2
 
 @app.route("/")
 def home():
-    return render_template("home_1.html")
+    registrationform = RegistrationForm()
+    return render_template("home_1.html", registrationform = registrationform)
 
 @app.route("/register", methods=["POST"])
 def register():
