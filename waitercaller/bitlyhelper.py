@@ -1,4 +1,3 @@
-#import urllib2
 from urllib.request import urlopen
 import json
 
@@ -11,8 +10,6 @@ class BitlyHelper:
     def shorten_url(self, longurl):
         try:
             url = ROOT_URL + SHORTEN.format(TOKEN, longurl)
-            #response = urllib2.urlopen(url).read()
-            #response = urllib.request.urlopen(url).read()
             response = urlopen(url).read().decode('utf8')
             jr = json.loads(response)
             return jr['data']['url']

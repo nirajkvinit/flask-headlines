@@ -1,17 +1,7 @@
-import datetime
 from flask import Flask, render_template, redirect, url_for, request
-#from flask import render_template
-#from flask import redirect
-#from flask import url_for
-#from flask import request
-#from flask.ext.login import LoginManager #resolve error ExtDeprecationWarning: Importing flask.ext.login is deprecated, use flask_login instead.
-#from flask.ext.login import login_required #resolve error ExtDeprecationWarning: Importing flask.ext.login is deprecated, use flask_login instead.
 from flask_login import LoginManager, login_required, login_user, logout_user, current_user
-#from flask_login import login_required
-#from flask_login import login_user
-#from flask_login import logout_user
-#from flask_login import current_user
 
+import datetime
 import config
 from mockdbhelper import MockDBHelper as DBHelper
 from user import User
