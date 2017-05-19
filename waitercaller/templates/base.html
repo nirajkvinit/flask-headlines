@@ -15,12 +15,23 @@
     <script src="https://oss.maxcdn.com/respond/1.4.2/
     respond.min.js"></script>
     <![endif]-->
+    <style media="screen" type="text/css">
+      ul.errors {
+        list-style-type: none;
+        padding: 0;
+        color: red;
+      }
+
+    </style>
   </head>
+  {% block bodytag %}
+  {% endblock %}
   <body>
     {% block navbar %}
     <nav class="navbar navbar-inverse navbar-fixed-top">
       <div class="container">
         <div class="navbar-header">
+          <a class="navbar-brand" href="/">Home</a>
           <a class="navbar-brand" href="/dashboard">Dashboard</a>
           <a class="navbar-brand" href="/account">Account</a>
         </div>
